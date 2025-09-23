@@ -1,0 +1,65 @@
+{% block swag_bundle_detail %}
+<sw-page class="swag-bundle-detail">
+
+    <!-- Smart bar actions -->
+    <template #smart-bar-actions>
+        <sw-button :router-link="{ name: 'swag.bundle.list' }">
+            {{ $t('swag-bundle.detail.cancelButtonText') }}
+        </sw-button>
+
+        <sw-button-process
+            :is-loading="isLoading"
+            :process-success="processSuccess"
+            variant="primary"
+            @process-finish="saveFinish"
+            @click="onClickSave">
+            {{ $t('swag-bundle.detail.saveButtonText') }}
+        </sw-button-process>
+    </template>
+
+    <!-- Page content -->
+    <template #content>
+        <sw-card-view>
+            <sw-card v-if="bundle" :is-loading="isLoading">
+
+                <!-- Name field -->
+                <sw-text-field
+                    :label="$t('swag-bundle.detail.nameLabel')"
+                    v-model:value="bundle.name">
+                </sw-text-field>
+
+                <!-- Discount field -->
+                <sw-number-field
+                    :label="$t('swag-bundle.detail.discountLabel')"
+                    v-model="bundle.discount">
+                </sw-number-field>
+
+                <!-- Discount type radio -->
+                <sw-radio-field
+                    :label="$t('swag-bundle.detail.discountTypeLabel')"
+                    v-model="bundle.discountType"
+                    :options="options">
+                </sw-radio-field>
+
+                <!-- Products many-to-many select -->
+               {# <sw-multi-select
+                    :label="$t('swag-bundle.detail.assignProductsLabel')"
+                    v-model="selectedProductIds"
+                    :options="productOptions"
+                    :disabled="isLoading">
+                </sw-multi-select> #}
+<sw-multi-select
+    v-model:value="selectedProductIds"
+    v-bind="$attrs"
+    :options="productOptions"
+    :disabled="isLoading"
+    placeholder="Select products"
+    value-property="id"
+    label-property="name"
+>
+            </sw-card>
+        </sw-card-view>
+    </template>
+
+</sw-page>
+{% endblock %}

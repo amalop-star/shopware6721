@@ -1,0 +1,14 @@
+{
+  "swag-bundle": {
+    "general": {
+      "mainMenuItemGeneral": "Bundles",
+      "mainMenuItemDescription": "Manage product bundles"
+    },
+    "list": {
+      "title": "Bundle list"
+    },
+    "detail": {
+      "title": "Bundle detail"
+    }
+  }
+}

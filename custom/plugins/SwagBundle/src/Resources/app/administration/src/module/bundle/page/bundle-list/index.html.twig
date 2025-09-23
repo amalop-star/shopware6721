@@ -1,0 +1,40 @@
+{% block sw_settings_showare_updates_index %}
+<sw-page>
+
+    {% block sw_product_list_smart_bar_header %}
+    <template #smart-bar-header>
+        {% block sw_product_list_smart_bar_header_title %}
+                        <h2>Bundles</h2>
+
+        {% endblock %}
+    </template>
+    {% endblock %}
+     {% block sw_customer_list_smart_bar_actions %}
+    <template #smart-bar-actions>
+        {% block sw_customer_list_smart_bar_actions_add %}
+        <sw-button
+            class="sw-customer-list__button-create"
+            variant="primary"
+            :router-link="{ name: 'swag-bundle.create' }"
+        >
+                    Create Bundle
+        </sw-button>
+        {% endblock %}
+    </template>
+    {% endblock %}
+
+<template #content>
+                <sw-entity-listing
+                    :items="bundles"
+                    :repository="repository"
+                    :columns="columns"
+                    :criteria="criteria"
+                    :total="total"
+                    inline-editing
+                />
+            </template>
+
+</sw-page>
+{% endblock %}
+
+

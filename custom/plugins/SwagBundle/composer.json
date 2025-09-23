@@ -1,0 +1,27 @@
+{
+    "name": "swag-bundle/swag-bundle",
+    "description": "swag-bundle/swag-bundle",
+    "type": "shopware-platform-plugin",
+    "version": "1.0.0",
+    "license": "MIT",
+    "require": {
+        "shopware/core": "~6.6.0"
+    },
+    "extra": {
+        "shopware-plugin-class": "SwagBundle\\SwagBundle",
+        "label": {
+            "de-DE": "Skeleton plugin",
+            "en-GB": "SwagBundle"
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "SwagBundle\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "SwagBundle\\Tests\\": "tests/"
+        }
+    }
+}

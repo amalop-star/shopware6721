@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+        <!-- Auto-register all classes in your plugin -->
+        <defaults autowire="true" autoconfigure="true" public="false" />
+        <service id="SwagBundle\Subscriber\MySubscriber">
+            <tag name="kernel.event_subscriber" />
+        </service>
+        <service id="SwagBundle\Core\Content\Bundle\BundleDefinition" />
+        <service id="SwagBundle\Core\Content\Bundle\BundleProductDefinition" />
+
+        <!-- Register entity repositories -->
+        <!-- <service id="SwagBundle\Core\Content\Bundle\BundleRepository"
+            class="Shopware\Core\Framework\DataAbstractionLayer\EntityRepository">
+            <factory service="Shopware\Core\Framework\DataAbstractionLayer\EntityRepositoryFactory"
+                method="create" />
+            <argument type="string">swag_bundle</argument>
+        </service>
+
+        <service id="SwagBundle\Core\Content\Bundle\BundleProductRepository"
+            class="Shopware\Core\Framework\DataAbstractionLayer\EntityRepository">
+            <factory service="Shopware\Core\Framework\DataAbstractionLayer\EntityRepositoryFactory"
+                method="create" />
+            <argument type="string">swag_bundle_product</argument>
+        </service> -->
+
+    </services>
+</container>
