@@ -1,0 +1,15 @@
+{% sw_extends '@Storefront/storefront/block/cms-block-image-text.html.twig' %}
+
+{% block block_text_image %}
+    <div class="row cms-block-custom">
+        <div class="col-4">
+            {% sw_include "@Storefront/storefront/element/cms-element-" ~ block.slots.left.type ~ ".html.twig" with { element: block.slots.left } %}
+        </div>
+        <div class="col-4">
+            {% sw_include "@Storefront/storefront/element/cms-element-" ~ block.slots.center.type ~ ".html.twig" with { element: block.slots.center } %}
+        </div>
+        <div class="col-4">
+            {% sw_include "@Storefront/storefront/element/cms-element-" ~ block.slots.right.type ~ ".html.twig" with { element: block.slots.right } %}
+        </div>
+    </div>
+{% endblock %}

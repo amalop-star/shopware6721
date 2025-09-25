@@ -1,6 +1,7 @@
 import template from './swag-bundle-detail.html.twig';
 
 const { Component, Mixin } = Shopware;
+const Criteria = Shopware.Data.Criteria;
 
 Component.register('swag-bundle-detail', {
     template,
@@ -19,7 +20,6 @@ Component.register('swag-bundle-detail', {
         };
     },
 
-    // ...existing code...
     data() {
         return {
             bundle: null,
@@ -56,38 +56,52 @@ Component.register('swag-bundle-detail', {
 
     methods: {
         getBundle() {
+            const criteria = new Criteria();
+            criteria.addAssociation('products');
             this.repository
-                .get(this.$route.params.id, Shopware.Context.api)
+                .get(this.$route.params.id, Shopware.Context.api, criteria)
                 .then((entity) => {
                     this.bundle = entity;
-                    // Set selected products if available
+                    // Set selectedProductIds for multi-select
                     if (entity.products) {
                         this.selectedProductIds = entity.products.map(p => p.id);
+                    } else {
+                        this.selectedProductIds = [];
                     }
                 });
         },
 
         loadProducts() {
-            const criteria = new Shopware.Data.Criteria(0, 50);
-            this.productRepository.search(criteria, Shopware.Context.api).then((result) => {
-                this.products = result;
-            });
+            const criteria = new Criteria(1, 100);
+            criteria.addFilter(
+                Criteria.equals('active', true)
+            );
+            criteria.addAssociation('translations'); // If using translations
+            criteria.addSorting(
+                Criteria.sort('name', 'ASC')
+            );
+
+            this.productRepository
+                .search(criteria, Shopware.Context.api)
+                .then((result) => {
+                    this.products = result;
+                });
         },
 
         onClickSave() {
-
             this.isLoading = true;
-            // Assign selected products to bundle before saving
+
+            
             this.bundle.products = this.selectedProductIds.map(id => ({ id }));
 
             this.repository
                 .save(this.bundle, Shopware.Context.api)
                 .then(() => {
-                    this.getBundle();
                     this.isLoading = false;
-                    this.processSuccess = true;
+                    this.$router.push({ name: 'swag.bundle.detail', params: { id: this.bundle.id } });
                 }).catch((exception) => {
                     this.isLoading = false;
+
                     this.createNotificationError({
                         title: this.$t('swag-bundle.detail.errorTitle'),
                         message: exception
@@ -99,5 +113,4 @@ Component.register('swag-bundle-detail', {
             this.processSuccess = false;
         }
     }
-    // ...existing code...
 });

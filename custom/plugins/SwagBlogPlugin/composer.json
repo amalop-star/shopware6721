@@ -1,0 +1,27 @@
+{
+    "name": "swag-blog-plugin/swag-blog-plugin",
+    "description": "swag-blog-plugin/swag-blog-plugin",
+    "type": "shopware-platform-plugin",
+    "version": "1.0.0",
+    "license": "MIT",
+    "require": {
+        "shopware/core": "~6.6.0"
+    },
+    "extra": {
+        "shopware-plugin-class": "SwagBlogPlugin\\SwagBlogPlugin",
+        "label": {
+            "de-DE": "Skeleton plugin",
+            "en-GB": "Skeleton plugin"
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "SwagBlogPlugin\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "SwagBlogPlugin\\Tests\\": "tests/"
+        }
+    }
+}

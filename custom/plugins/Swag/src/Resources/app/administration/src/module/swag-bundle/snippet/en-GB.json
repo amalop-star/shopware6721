@@ -8,7 +8,8 @@
             "addButtonText": "Add bundle",
             "columnName": "Name",
             "columnDiscountType": "Discount type",
-            "columnDiscount": "Discount"
+            "columnDiscount": "Discount",
+            "columnProducts": "Products"
         },
         "detail": {
             "nameLabel": "Name",

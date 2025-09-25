@@ -1,0 +1,7 @@
+{% block element_custom_url %}
+    {% if element.config.url.value %}
+        <div class="cms-element-custom-url">
+            <a href="{{ element.config.url.value }}" target="_blank">{{ element.config.url.value }}</a>
+        </div>
+    {% endif %}
+{% endblock %}

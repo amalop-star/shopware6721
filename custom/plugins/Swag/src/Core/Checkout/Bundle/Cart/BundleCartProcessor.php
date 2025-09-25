@@ -18,7 +18,9 @@ use Shopware\Core\Checkout\Cart\Price\QuantityPriceCalculator;
 use Shopware\Core\Checkout\Cart\Price\Struct\AbsolutePriceDefinition;
 use Shopware\Core\Checkout\Cart\Price\Struct\PercentagePriceDefinition;
 use Shopware\Core\Checkout\Cart\Price\Struct\QuantityPriceDefinition;
-use Shopware\Core\Framework\DataAbstractionLayer\EntityRepositoryInterface;
+// use Shopware\Core\Framework\DataAbstractionLayer\EntityRepositoryInterface;
+use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
+
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Shopware\Core\System\SalesChannel\SalesChannelContext;
 use Swag\BundleExample\Core\Content\Bundle\BundleCollection;
@@ -53,7 +55,7 @@ class BundleCartProcessor implements CartProcessorInterface, CartDataCollectorIn
     private $quantityPriceCalculator;
 
     public function __construct(
-        EntityRepositoryInterface $bundleRepository,
+        EntityRepository $bundleRepository,
         PercentagePriceCalculator $percentagePriceCalculator,
         AbsolutePriceCalculator $absolutePriceCalculator,
         QuantityPriceCalculator $quantityPriceCalculator
@@ -75,7 +77,6 @@ class BundleCartProcessor implements CartProcessorInterface, CartDataCollectorIn
 
         // fetch missing bundle information from database
         $bundles = $this->fetchBundles($bundleLineItems, $data, $context);
-
         foreach ($bundles as $bundle) {
             // ensure all line items have a data entry
             $data->set(self::DATA_KEY . $bundle->getId(), $bundle);

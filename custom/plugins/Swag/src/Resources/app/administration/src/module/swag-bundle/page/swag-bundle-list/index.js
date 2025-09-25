@@ -44,15 +44,35 @@ Component.register('swag-bundle-list', {
                 dataIndex: 'discountType',
                 label: this.$t('swag-bundle.list.columnDiscountType'),
                 allowResize: true
-            }];
+            },
+            {
+                property: 'products',
+                label: this.$t('swag-bundle.list.columnProducts'),
+                allowResize: true,
+                // Custom renderer for product names
+                renderer: (bundle) => {
+                    this.repository.search(criteria, Shopware.Context.api).then(result => {
+                        this.bundles = result.map(bundle => {
+                            bundle.productNames = bundle.products
+                                ? bundle.products.map(p => p.translated?.name || p.name || p.productNumber).join(', ')
+                                : '-';
+                            return bundle;
+                        });
+                    });
+                }
+            }
+            ];
         }
     },
 
     created() {
         this.repository = this.repositoryFactory.create('swag_bundle');
+        const criteria = new Criteria();
+        criteria.addAssociation('products');
+        criteria.addAssociation('products.translations'); // fetch names
 
         this.repository
-            .search(new Criteria(), Shopware.Context.api)
+            .search(criteria, Shopware.Context.api)
             .then((result) => {
                 this.bundles = result;
             });

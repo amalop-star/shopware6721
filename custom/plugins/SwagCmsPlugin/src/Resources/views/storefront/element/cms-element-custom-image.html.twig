@@ -1,0 +1,7 @@
+{% block element_custom_image %}
+    {% if element.config.media.value %}
+        <div class="cms-element-custom-image">
+            <img src="{{ element.config.media.value|sw_encode_media_url }}" alt="Custom image"/>
+        </div>
+    {% endif %}
+{% endblock %}

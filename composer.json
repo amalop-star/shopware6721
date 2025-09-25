@@ -62,5 +62,8 @@
                 "flex://defaults"
             ]
         }
+    },
+    "require-dev": {
+        "symfony/web-profiler-bundle": "^7.2"
     }
 }

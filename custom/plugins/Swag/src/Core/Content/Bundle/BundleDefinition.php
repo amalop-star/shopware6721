@@ -44,4 +44,6 @@ class BundleDefinition extends EntityDefinition
             new ManyToManyAssociationField('products', ProductDefinition::class, BundleProductDefinition::class, 'bundle_id', 'product_id'),
         ]);
     }
+
+
 }

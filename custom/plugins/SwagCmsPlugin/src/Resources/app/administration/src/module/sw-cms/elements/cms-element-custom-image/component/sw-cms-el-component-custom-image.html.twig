@@ -1,0 +1,6 @@
+{% block sw_cms_el_component_custom_image %}
+    <div class="sw-cms-el-component-custom-image">
+        <img v-if="mediaUrl" :src="mediaUrl" alt="Custom Image"/>
+        <div v-else class="is--placeholder">No image selected</div>
+    </div>
+{% endblock %}
