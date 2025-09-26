@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace SwagBlogPlugin\Core\Content\Blog;
 
@@ -9,20 +11,20 @@ class BlogEntity extends Entity
 {
     use EntityIdTrait;
 
-    protected ?string $name;
+    protected ?string $title;
 
     protected ?string $description;
 
     protected bool $active;
 
-    public function getName(): ?string
+    public function getTitle(): ?string
     {
-        return $this->name;
+        return $this->title;
     }
 
-    public function setName(?string $name): void
+    public function setTitle(?string $title): void
     {
-        $this->name = $name;
+        $this->title = $title;
     }
 
     public function getDescription(): ?string
@@ -43,5 +45,14 @@ class BlogEntity extends Entity
     public function setActive(bool $active): void
     {
         $this->active = $active;
+    }
+    public function getPublishedAt(): ?\DateTimeInterface
+    {
+        return $this->publishedAt;
+    }
+
+    public function setPublishedAt(?\DateTimeInterface $publishedAt): void
+    {
+        $this->publishedAt = $publishedAt;
     }
 }

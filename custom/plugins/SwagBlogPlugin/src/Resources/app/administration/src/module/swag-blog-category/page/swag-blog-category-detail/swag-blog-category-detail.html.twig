@@ -1,0 +1,29 @@
+{% block swag_blog_category_detail %}
+	<sw-page class="swag-blog-category-detail">
+
+		<template #smart-bar-header>
+			<h2 v-if="category && category.name">
+				{{ category.name }}
+			</h2>
+			<h2 v-else>
+				{{ $tc('swag-blog-category.detail.titleNew') }}
+			</h2>
+		</template>
+
+		<template #smart-bar-actions>
+			<sw-button variant="primary" :disabled="isLoading" @click="onSave">
+				{{ $tc('global.default.save') }}
+			</sw-button>
+		</template>
+
+		<template #content>
+			<sw-card-view>
+				<sw-card :title="$tc('swag-blog-category.detail.cardGeneral')">
+					<sw-text-field v-model:value="category.name" label="Name" :error="category.errors?.name"/>
+					<sw-textarea-field v-model:value="category.description" label="Description" :error="category.errors?.description"/>
+
+				</sw-card>
+			</sw-card-view>
+		</template>
+	</sw-page>
+{% endblock %}

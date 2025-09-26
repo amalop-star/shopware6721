@@ -15,21 +15,21 @@ class Migration1758793285CreateBlogCategoryTable extends MigrationStep
     public function update(Connection $connection): void
     {
         $sql = <<<SQL
-CREATE TABLE IF NOT EXISTS `blog_category` (
-    `id` BINARY(16) NOT NULL,
-    `name` VARCHAR(255) COLLATE utf8mb4_unicode_ci,
-    `description` VARCHAR(255) COLLATE utf8mb4_unicode_ci,
-    `active` TINYINT(1) COLLATE utf8mb4_unicode_ci,
-    `created_at` DATETIME(3) NOT NULL,
-    `updated_at` DATETIME(3),
-    PRIMARY KEY (`id`)
-)
-    ENGINE = InnoDB
-    DEFAULT CHARSET = utf8mb4
-    COLLATE = utf8mb4_unicode_ci;
-SQL;
-
+        CREATE TABLE IF NOT EXISTS `swag_blog_category` (
+            `id` BINARY(16) NOT NULL,
+            `name` VARCHAR(255) NOT NULL,
+            `description` TEXT NULL,
+            `created_at` DATETIME NOT NULL,
+            `updated_at` DATETIME NULL,
+            PRIMARY KEY (`id`)
+        )
+            ENGINE = InnoDB
+            DEFAULT CHARSET = utf8mb4
+            COLLATE = utf8mb4_unicode_ci;
+        SQL;
         $connection->executeStatement($sql);
+
+        
     }
 
     public function updateDestructive(Connection $connection): void

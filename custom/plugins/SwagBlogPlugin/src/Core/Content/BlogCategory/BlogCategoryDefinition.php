@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace SwagBlogPlugin\Core\Content\BlogCategory;
 
@@ -9,10 +11,15 @@ use Shopware\Core\Framework\DataAbstractionLayer\Field\Flag\PrimaryKey;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\Flag\Required;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\IdField;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\StringField;
+use Shopware\Core\Framework\DataAbstractionLayer\Field\LongTextField;
+use Shopware\Core\Framework\DataAbstractionLayer\Field\ManyToManyAssociationField;
+use SwagBlogPlugin\Core\Content\Blog\BlogDefinition;
+use Shopware\Core\Framework\DataAbstractionLayer\Field\CreatedAtField;
+use Shopware\Core\Framework\DataAbstractionLayer\Field\UpdatedAtField;
 
 class BlogCategoryDefinition extends EntityDefinition
 {
-    public const ENTITY_NAME = 'blog_category';
+    public const ENTITY_NAME = 'swag_blog_category';
 
     public function getEntityName(): string
     {
@@ -32,10 +39,21 @@ class BlogCategoryDefinition extends EntityDefinition
     protected function defineFields(): FieldCollection
     {
         return new FieldCollection([
-            (new IdField('id', 'id'))->addFlags(new Required(), new PrimaryKey()),
-            (new StringField('name', 'name')),
-            (new StringField('description', 'description')),
-            (new BoolField('active', 'active'))
+            (new IdField('id', 'id'))->addFlags(new PrimaryKey(), new Required()),
+
+            (new StringField('name', 'name'))->addFlags(new Required()),
+            new LongTextField('description', 'description'),
+
+            new ManyToManyAssociationField(
+                'blogs',
+                BlogDefinition::class,
+                'swag_blog_category_mapping',
+                'category_id',
+                'blog_id'
+            ),
+
+            new CreatedAtField(),
+            new UpdatedAtField(),
         ]);
     }
 }

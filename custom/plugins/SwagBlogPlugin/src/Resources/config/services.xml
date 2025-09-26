@@ -1,18 +1,23 @@
-<?xml version="1.0" ?>
+<?xml version="1.0"?>
 
 <container xmlns="http://symfony.com/schema/dic/services"
-           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <services>
 
         <service id="SwagBlogPlugin\Core\Content\Blog\BlogDefinition">
-            <tag name="shopware.entity.definition" entity="blog" />
+            <tag name="shopware.entity.definition" entity="swag_blog" />
         </service>
 
         <service id="SwagBlogPlugin\Core\Content\BlogCategory\BlogCategoryDefinition">
-            <tag name="shopware.entity.definition" entity="blog_category" />
+            <tag name="shopware.entity.definition" entity="swag_blog_category" />
         </service>
-
+        <service id="SwagBlogPlugin\Core\Content\BlogMedia\BlogMediaDefinition">
+            <tag name="shopware.entity.definition" entity="swag_blog_media" />
+        </service>
+          <service id="SwagBlogPlugin\Core\Content\BlogCategory\BlogCategoryMappingDefinition">
+            <tag name="shopware.entity.definition" entity="swag_blog_category_mapping" />
+        </service>
     </services>
 </container>

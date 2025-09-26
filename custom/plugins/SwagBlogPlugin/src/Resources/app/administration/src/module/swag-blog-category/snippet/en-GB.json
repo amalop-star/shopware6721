@@ -1,0 +1,32 @@
+
+
+{
+    "swag-blog-category": {
+        "list": {
+            "textHeadline": "Blog Categories",
+            "buttonAdd": "Add Category",
+            "columnName": "Name",
+            "contextMenuEdit": "Edit",
+            "buttonDelete": "Delete",
+            "textDeleteConfirm": "Do you really want to delete category \"{name}\"?",
+            "messageDeleteSuccess": "Category \"{name}\" deleted successfully.",
+            "messageEmpty": "No categories available.",
+            "placeholderSearchBar": "Search blog categories...",
+            "deleteConfirm": "Do you really want to delete the category \"{name}\"?",
+            "emptyMessage": "No categories found"
+        },
+        "detail": {
+            "titleNew": "New Blog Category",
+            "cardGeneral": "General Information",
+            "labelName": "Name",
+            "labelDescription": "Description",
+            "messageSaveSuccess": "Category saved successfully.",
+            "messageSaveError": "Error saving category.",
+            "messageNameRequired": "Name is required."
+        },
+        "general": {
+            "mainMenuItemGeneral": "Blog Categories",
+            "description": "Manage blog categories"
+        }
+    }
+}

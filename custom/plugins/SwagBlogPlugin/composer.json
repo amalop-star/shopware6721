@@ -10,8 +10,8 @@
     "extra": {
         "shopware-plugin-class": "SwagBlogPlugin\\SwagBlogPlugin",
         "label": {
-            "de-DE": "Skeleton plugin",
-            "en-GB": "Skeleton plugin"
+            "de-DE": "Blog plugin",
+            "en-GB": "Blog plugin"
         }
     },
     "autoload": {
