@@ -1,0 +1,36 @@
+{% block swag_blog_media_form %}
+	<div class="sw-blog-media-form" :class="{ 'is--disabled': disabled }">
+		{% block swag_blog_media_form_upload %}
+			<sw-upload-listener v-if="!isLoading" :upload-tag="blog.id" auto-upload @media-upload-finish="successfulUpload" @media-upload-fail="onUploadFailed"/>
+
+			<sw-media-upload-v2 v-if="!isLoading" variant="regular" :upload-tag="blog.id" :scroll-target="$parent.$el" :default-folder="blog.getEntityName()" :file-accept="fileAccept" @media-upload-sidebar-open="onOpenMedia"/>
+		{% endblock %}
+
+		{% block swag_blog_media_form_grid %}
+			<div class="sw-blog-media-form__previews">
+				<div class="sw-blog-media-form__cover-container sw-blog-media-form__column">
+					{% block swag_blog_media_form_cover_preview %}
+						<div v-if="blog.mainImage || cover" class="sw-blog-media-form__preview-cover">
+							<div class="preview-cover">
+								{% block swag_blog_media_form_cover_image %}
+									<sw-media-preview-v2 :key="cover ? cover.media?.url : blog.mainImage.media?.url" class="sw-blog-media-form__cover-image" :source="cover ? cover.mediaId : blog.mainImage.mediaId"/>
+								{% endblock %}
+								<span>{{ $tc('sw-blog.mediaForm.coverSubline') }}</span>
+							</div>
+						</div>
+						<div v-else class="sw-blog-media-form__cover-image is--placeholder">
+							{{ $tc('sw-blog.mediaForm.coverSubline') }}
+						</div>
+					{% endblock %}
+				</div>
+
+				<div v-if="!isLoading" class="sw-blog-media-form__grid sw-blog-media-form__column" :style="gridAutoRows">
+					{%  block swag_blog_media_form_grid_items %}
+						<sw-blog-image v-for="mediaItem in mediaItems" :key="mediaItem.id" v-draggable="{ dragGroup: 'blog-media', data: mediaItem, onDragEnter: onMediaItemDragSort }" v-droppable="{ dragGroup: 'blog-media', data: mediaItem }" :is-cover="isCover(mediaItem)" :is-spatial="isSpatial(mediaItem)" :is-ar-ready="isArReady(mediaItem)" :is-placeholder="mediaItem.isPlaceholder" :media-id="mediaItem.mediaId" :show-cover-label="showCoverLabel" @sw-blog-image-delete="removeFile(mediaItem)" @sw-blog-image-cover="markMediaAsCover(mediaItem)"/>
+					{% endblock %}
+				</div>
+				<sw-loader v-else/>
+			</div>
+		{% endblock %}
+	</div>
+{% endblock %}

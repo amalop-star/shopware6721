@@ -12,7 +12,7 @@ use Shopware\Core\Framework\DataAbstractionLayer\Field\Flag\Required;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\IdField;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\StringField;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\LongTextField;
-use Shopware\Core\Framework\DataAbstractionLayer\Field\ManyToManyAssociationField;
+use Shopware\Core\Framework\DataAbstractionLayer\Field\OneToManyAssociationField;
 use SwagBlogPlugin\Core\Content\Blog\BlogDefinition;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\CreatedAtField;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\UpdatedAtField;
@@ -43,15 +43,7 @@ class BlogCategoryDefinition extends EntityDefinition
 
             (new StringField('name', 'name'))->addFlags(new Required()),
             new LongTextField('description', 'description'),
-
-            new ManyToManyAssociationField(
-                'blogs',
-                BlogDefinition::class,
-                'swag_blog_category_mapping',
-                'category_id',
-                'blog_id'
-            ),
-
+            new OneToManyAssociationField('blogs', BlogDefinition::class, 'category_id'),
             new CreatedAtField(),
             new UpdatedAtField(),
         ]);

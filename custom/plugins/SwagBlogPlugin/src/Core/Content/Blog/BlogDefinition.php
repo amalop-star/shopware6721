@@ -48,16 +48,12 @@ class BlogDefinition extends EntityDefinition
             new LongTextField('description', 'description'),
             (new StringField('author', 'author'))->addFlags(new Required()),
             new DateTimeField('published_at', 'publishedAt'),
+            new FkField('category_id', 'categoryId', BlogCategoryDefinition::class),
+            new ManyToOneAssociationField('category', 'category_id', BlogCategoryDefinition::class, 'id'),
 
             new FkField('main_image_id', 'mainImageId', MediaDefinition::class),
             new ManyToOneAssociationField('mainImage', 'main_image_id', MediaDefinition::class, 'id', false),
-            new ManyToManyAssociationField(
-                'categories',
-                BlogCategoryDefinition::class,
-                'swag_blog_category_mapping',
-                'blog_id',
-                'category_id'
-            ),
+
             new OneToManyAssociationField('gallery', BlogMediaDefinition::class, 'blog_id'),
         ]);
     }

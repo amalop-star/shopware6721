@@ -16,8 +16,5 @@
         <service id="SwagBlogPlugin\Core\Content\BlogMedia\BlogMediaDefinition">
             <tag name="shopware.entity.definition" entity="swag_blog_media" />
         </service>
-          <service id="SwagBlogPlugin\Core\Content\BlogCategory\BlogCategoryMappingDefinition">
-            <tag name="shopware.entity.definition" entity="swag_blog_category_mapping" />
-        </service>
     </services>
 </container>

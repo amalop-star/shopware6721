@@ -23,29 +23,22 @@ class Migration1758793285CreateBlogTable extends MigrationStep
             `description` LONGTEXT NULL,
             `author` VARCHAR(255) NOT NULL,
             `main_image_id` BINARY(16) NULL,
+            `category_id` BINARY(16) NULL, 
             `published_at` DATETIME NULL,
             `created_at` DATETIME NOT NULL,
             `updated_at` DATETIME NULL,
-            PRIMARY KEY (`id`)
+            PRIMARY KEY (`id`),
+            CONSTRAINT `fk_blog_category`
+        FOREIGN KEY (`category_id`)
+        REFERENCES `swag_blog_category` (`id`)
+        ON DELETE SET NULL
+        ON UPDATE CASCADE
         )
             ENGINE = InnoDB
             DEFAULT CHARSET = utf8mb4
             COLLATE = utf8mb4_unicode_ci;
         SQL;
         $connection->executeStatement($sql);
-
-        $mapping_sql = <<<SQL
-        CREATE TABLE IF NOT EXISTS `swag_blog_category_mapping` (
-                `blog_id` BINARY(16) NOT NULL,
-                `category_id` BINARY(16) NOT NULL,
-                PRIMARY KEY (`blog_id`, `category_id`),
-                CONSTRAINT `fk.blog_category.blog` FOREIGN KEY (`blog_id`) REFERENCES `swag_blog` (`id`) ON DELETE CASCADE,
-                CONSTRAINT `fk.blog_category.category` FOREIGN KEY (`category_id`) REFERENCES `swag_blog_category` (`id`) ON DELETE CASCADE
-            ) ENGINE = InnoDB
-            DEFAULT CHARSET = utf8mb4
-            COLLATE = utf8mb4_unicode_ci;
-        SQL;
-        $connection->executeStatement($mapping_sql);
 
         $gallery_sql = <<<SQL
         CREATE TABLE IF NOT EXISTS `swag_blog_media` (
@@ -65,7 +58,6 @@ class Migration1758793285CreateBlogTable extends MigrationStep
             COLLATE = utf8mb4_unicode_ci;
         SQL;
         $connection->executeStatement($gallery_sql);
-
     }
 
     public function updateDestructive(Connection $connection): void {}

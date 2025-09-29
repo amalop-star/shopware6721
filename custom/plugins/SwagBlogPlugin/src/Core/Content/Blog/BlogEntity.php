@@ -1,28 +1,29 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
 namespace SwagBlogPlugin\Core\Content\Blog;
 
 use Shopware\Core\Framework\DataAbstractionLayer\Entity;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityIdTrait;
+use SwagBlogPlugin\Core\Content\BlogCategory\BlogCategoryEntity;
 
 class BlogEntity extends Entity
 {
     use EntityIdTrait;
 
-    protected ?string $title;
+    protected string $title;
+    protected ?string $description = null;
+    protected string $author;
+    protected ?string $categoryId = null;   // FK field
+    protected ?BlogCategoryEntity $category = null; // Association
+    protected ?string $mainImageId = null;
+    protected ?\DateTimeInterface $publishedAt = null;
 
-    protected ?string $description;
-
-    protected bool $active;
-
-    public function getTitle(): ?string
+    public function getTitle(): string
     {
         return $this->title;
     }
 
-    public function setTitle(?string $title): void
+    public function setTitle(string $title): void
     {
         $this->title = $title;
     }
@@ -37,15 +38,46 @@ class BlogEntity extends Entity
         $this->description = $description;
     }
 
-    public function isActive(): bool
+    public function getAuthor(): string
     {
-        return $this->active;
+        return $this->author;
     }
 
-    public function setActive(bool $active): void
+    public function setAuthor(string $author): void
     {
-        $this->active = $active;
+        $this->author = $author;
     }
+
+    public function getCategoryId(): ?string
+    {
+        return $this->categoryId;
+    }
+
+    public function setCategoryId(?string $categoryId): void
+    {
+        $this->categoryId = $categoryId;
+    }
+
+    public function getCategory(): ?BlogCategoryEntity
+    {
+        return $this->category;
+    }
+
+    public function setCategory(?BlogCategoryEntity $category): void
+    {
+        $this->category = $category;
+    }
+
+    public function getMainImageId(): ?string
+    {
+        return $this->mainImageId;
+    }
+
+    public function setMainImageId(?string $mainImageId): void
+    {
+        $this->mainImageId = $mainImageId;
+    }
+
     public function getPublishedAt(): ?\DateTimeInterface
     {
         return $this->publishedAt;

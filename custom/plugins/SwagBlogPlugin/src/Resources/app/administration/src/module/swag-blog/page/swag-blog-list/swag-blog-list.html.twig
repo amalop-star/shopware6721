@@ -1,0 +1,112 @@
+{% block swag_blog_list %}
+	<sw-page
+		class="swag-blog-list">
+
+		{# Search bar #}
+		{% block swag_blog_list_search_bar %}
+			<template #search-bar>
+				<sw-search-bar initial-search-type="blog" :placeholder="$tc('swag-blog.list.placeholderSearchBar')" :initial-search="term" @search="onSearch"/>
+			</template>
+		{% endblock %}
+
+		{# Header #}
+		{% block swag_blog_list_header %}
+			<template #smart-bar-header>
+				<h2>
+					{{ $tc('swag-blog.general.mainMenuItemGeneral') }}
+					<sw-icon name="regular-chevron-right-xs" small/>
+					{{ $tc('swag-blog.list.textHeadline') }}
+
+					<span v-if="!isLoading" class="sw-page__smart-bar-amount">
+						({{ total }})
+					</span>
+				</h2>
+			</template>
+		{% endblock %}
+
+		{# Actions (Add button) #}
+		{% block swag_blog_list_actions %}
+			<template #smart-bar-actions>
+				<sw-button class="swag-blog-list__button-create" :router-link="{ name: 'swag.blog.create' }" variant="primary">
+					{{ $tc('swag-blog.list.buttonAdd') }}
+				</sw-button>
+			</template>
+		{% endblock %}
+
+		{# Content (Grid) #}
+		{% block swag_blog_list_content %}
+			<template #content>
+				<sw-card-view>
+					<sw-card class="swag-blog-list__card" position-identifier="swag-blog-list">
+						<template #grid>
+							<sw-grid v-show="items.length > 0" class="swag-blog-list-grid" :selectable="false" :items="items" table>
+								<template
+									#columns="{ item }">
+
+									{# Title column #}
+									<sw-grid-column flex="minmax(200px, 2fr)" :label="$tc('swag-blog.list.columnTitle')">
+										<router-link :title="$tc('swag-blog.list.contextMenuEdit')" class="swag-blog-list__column-title" :to="{ name: 'swag.blog.detail', params: { id: item.id } }">
+											{{ item.title }}
+										</router-link>
+									</sw-grid-column>
+
+									{# Categories column #}
+									<sw-grid-column flex="minmax(150px, 1fr)" :label="$tc('swag-blog.list.columnCategories')">
+										{{ item.category ? item.category.name : '' }}
+									</sw-grid-column>
+									{# Author column #}
+									<sw-grid-column flex="minmax(150px, 1fr)" :label="$tc('swag-blog.list.columnAuthor')">
+										{{ item.author }}
+									</sw-grid-column>
+
+									{# Published Date column #}
+									<sw-grid-column flex="minmax(150px, 2fr)" :label="$tc('swag-blog.list.columnPublishedAt')">
+										{{ item?.publishedAt ? (new Date(item.publishedAt)).toLocaleString() : '' }}
+									</sw-grid-column>
+
+
+									{# Actions column #}
+									<sw-grid-column flex="minmax(70px, 70px)" align="center" :label="$tc('swag-blog.list.columnActions')">
+										<sw-context-button>
+											<sw-context-menu-item class="swag-blog-list__edit-action" :router-link="{ name: 'swag.blog.detail', params: { id: item.id } }">
+												{{ $tc('swag-blog.list.contextMenuEdit') }}
+											</sw-context-menu-item>
+
+											<sw-context-menu-item class="swag-blog-list__delete-action" variant="danger" @click="onDeleteBlog(item)">
+												{{ $tc('swag-blog.list.buttonDelete') }}
+											</sw-context-menu-item>
+										</sw-context-button>
+									</sw-grid-column>
+
+									{# Delete modal #}
+									<sw-modal v-if="showModal && deleteEntity?.id === item.id" :title="$tc('global.default.warning')" variant="small" @modal-close="cancelDelete">
+										<p>
+											{{ $tc('swag-blog.list.textDeleteConfirm', 0, { title: item.title }) }}
+										</p>
+
+										<template #modal-footer>
+											<sw-button size="small" @click="cancelDelete">
+												{{ $tc('global.default.cancel') }}
+											</sw-button>
+											<sw-button variant="danger" size="small" @click="confirmDeleteBlog">
+												{{ $tc('swag-blog.list.buttonDelete') }}
+											</sw-button>
+										</template>
+									</sw-modal>
+								</template>
+
+								{# Pagination #}
+								<template #pagination>
+									<sw-pagination :page="page" :limit="limit" :total="total" :total-visible="7" @page-change="onPageChange"/>
+								</template>
+							</sw-grid>
+						</template>
+
+						{# Empty state if no results #}
+						<sw-empty-state v-if="!isLoading && items.length <= 0" :absolute="false" :title="$tc('swag-blog.list.messageEmpty')"/>
+					</sw-card>
+				</sw-card-view>
+			</template>
+		{% endblock %}
+	</sw-page>
+{% endblock %}

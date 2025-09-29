@@ -1,32 +1,42 @@
-
-
 {
-    "swag-blog-category": {
+    "swag-blog": {
+        "general": {
+            "mainMenuItemGeneral": "Blog",
+            "descriptionTextModule": "Manage blogs"
+        },
         "list": {
-            "textHeadline": "Blog Categories",
-            "buttonAdd": "Add Category",
-            "columnName": "Name",
+            "title": "Blog listing",
+            "createButton": "Add blog",
+            "searchPlaceholder": "Search blog...",
+            "emptyMessage": "No blogs found",
+            "textHeadline": "Blogs",
+            "buttonAdd": "Add Blog",
+            "columnTitle": "Title",
             "contextMenuEdit": "Edit",
             "buttonDelete": "Delete",
-            "textDeleteConfirm": "Do you really want to delete category \"{name}\"?",
-            "messageDeleteSuccess": "Category \"{name}\" deleted successfully.",
-            "messageEmpty": "No categories available.",
-            "placeholderSearchBar": "Search blog categories...",
-            "deleteConfirm": "Do you really want to delete the category \"{name}\"?",
-            "emptyMessage": "No categories found"
+            "textDeleteConfirm": "Do you really want to delete blog \"{title}\"?",
+            "messageDeleteSuccess": "Blog \"{title}\" deleted successfully.",
+            "messageEmpty": "No blogs available.",
+            "placeholderSearchBar": "Search blogs...",
+            "columnCategories": "Categories",
+            "columnAuthor": "Author",
+            "columnPublishedAt": "Published at",
+            "messageDeleteError": "An error occurred while deleting the blog.",
+            "columnActions": "Actions"
         },
         "detail": {
-            "titleNew": "New Blog Category",
-            "cardGeneral": "General Information",
-            "labelName": "Name",
-            "labelDescription": "Description",
-            "messageSaveSuccess": "Category saved successfully.",
-            "messageSaveError": "Error saving category.",
-            "messageNameRequired": "Name is required."
-        },
-        "general": {
-            "mainMenuItemGeneral": "Blog Categories",
-            "description": "Manage blog categories"
+            "title": "Blog detail",
+            "saveSuccess": "Blog saved successfully",
+            "saveError": "Error saving blog",
+            "messageNameRequired": "Please fill the Name field.",
+            "messageTitleRequired": "Please fill the Title field.",
+            "labelPublishedAt": "Published at",
+            "cardGeneral": "Blog details",
+            "messageSaveSuccess": "Blog saved successfully.",
+            "messageSaveError": "Error saving blog.",
+            "titleNew": "New blog",
+            "buttonSave": "Save",
+            "buttonCancel": "Cancel"
         }
     }
 }

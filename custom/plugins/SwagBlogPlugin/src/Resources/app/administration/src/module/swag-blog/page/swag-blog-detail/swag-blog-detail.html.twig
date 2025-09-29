@@ -1,0 +1,47 @@
+{% block swag_blog_detail %}
+	<sw-page class="swag-blog-detail">
+
+		<template #smart-bar-header>
+			<h2 v-if="blog && blog.title">
+				{{ blog.title }}
+			</h2>
+			<h2 v-else>
+				{{ $tc('swag-blog.detail.titleNew') }}
+			</h2>
+		</template>
+
+		<template #smart-bar-actions>
+			<sw-button variant="primary" :disabled="isLoading" @click="onSave">
+				{{ $tc('global.default.save') }}
+			</sw-button>
+		</template>
+
+		<template #content>
+			<sw-card-view>
+				<sw-card :title="$tc('swag-blog.detail.cardGeneral')">
+					<sw-text-field v-model:value="blog.title" label="Title" :error="blog.errors?.title" required/>
+					<sw-textarea-field v-model:value="blog.description" label="Description" :error="blog.errors?.description"/>
+
+					<sw-text-field
+					v-model:value="blog.author" label="Author" :error="blog.errors?.author" required/>
+
+					<!-- Category (single select) -->
+					<sw-single-select v-model:value="blog.categoryId" label="Category" :error="blog.errors?.categoryId" :options="categoryOptions" display-field="label" value-property="value" placeholder="Select a category"/>
+					<sw-datepicker v-model:value="blog.publishedAt" :label="$tc('swag-blog.detail.labelPublishedAt')" size="medium" required :date-type="isDateTime" :error="blog.errors?.publishedAt"/>
+
+				 	<sw-product-media-form
+                        v-if="mediaFormVisible"
+                        :key="isInherited"
+                        :product-id="isInherited ? parentProduct.id : product.id"
+                        :is-inherited="isInherited"
+                        :disabled="isInherited || !acl.can('product.editor')"
+                        @media-open="onOpenMediaModal"
+                    />
+
+				</sw-card>
+
+
+			</sw-card-view>
+		</template>
+	</sw-page>
+{% endblock %}
