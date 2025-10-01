@@ -1,15 +1,11 @@
-/**
- * @sw-package framework
- */
 import template from './swag-blog-create.html.twig';
-// import './swag-blog-create.scss';
 
-const { Mixin } = Shopware;
+const { Mixin, Context, Data: { Criteria } } = Shopware;
 
 export default {
     template,
 
-    inject: ['repositoryFactory'],
+    inject: ['repositoryFactory', 'acl'],
 
     mixins: [
         Mixin.getByName('notification'),
@@ -17,64 +13,76 @@ export default {
 
     data() {
         return {
-            blog: null,
+            blog: {
+                title: '',
+                description: '',
+                categoryId: null,
+                mainImageId: null,
+                mainImage: null,
+                errors: {},
+                publishedAt: null,
+            },
+            categories: [],
             isLoading: false,
-            isSaveSuccessful: false,
         };
     },
 
     computed: {
-        repository() {
+        blogRepository() {
             return this.repositoryFactory.create('swag_blog');
+        },
+
+        categoryRepository() {
+            return this.repositoryFactory.create('swag_blog_category');
+        },
+
+        categoryOptions() {
+            return this.categories.map(cat => ({ value: cat.id, label: cat.name }));
         },
     },
 
     created() {
+        this.loadCategories();
         this.loadEntity();
     },
 
     methods: {
-        loadEntity() {
-            this.blog = this.repository.create(Shopware.Context.api);
+        loadCategories() {
+            const criteria = new Criteria(1, 100);
+            criteria.addSorting(Criteria.sort('name', 'ASC'));
+
+            this.categoryRepository.search(criteria, Context.api).then(result => {
+                this.categories = result;
+            });
         },
 
+        loadEntity() {
+            this.blog = this.blogRepository.create(Context.api);
+        },
+
+      
+
         onSave() {
-            this.blog.errors = {};
-
             if (!this.blog.title || this.blog.title.trim() === '') {
-                this.blog.errors = { title: 'Title must not be empty.' };
-
+                this.blog.errors.title = 'Title must not be empty';
                 this.createNotificationError({
-                    message: this.$tc('swag-blog.detail.messageTitleRequired') || 'Please fill the Title field.',
+                    message: 'Please fill the Title field.',
                 });
-
                 return;
             }
 
             this.isLoading = true;
-            this.isSaveSuccessful = false;
 
-            this.repository
-                .save(this.blog, Shopware.Context.api)
-                .then((entity) => {
-                    this.isSaveSuccessful = true;
-                    this.createNotificationSuccess({
-                        message: this.$tc('swag-blog.detail.messageSaveSuccess'),
-                    });
-                    // navigate to detail page after create
-                    this.$router.push({
-                        name: 'swag.blog.detail',
-                        params: { id: this.blog.id },
-                    });
+            this.blogRepository.save(this.blog, Context.api)
+                .then(() => {
+                    this.createNotificationSuccess({ message: 'Blog created successfully.' });
+                    // navigate to detail page
+                    this.$router.push({ name: 'swag.blog.detail', params: { id: this.blog.id } });
                 })
                 .catch(() => {
-                    this.createNotificationError({
-                        message: this.$tc('swag-blog.detail.messageSaveError'),
-                    });
+                    this.createNotificationError({ message: 'Failed to create blog.' });
                 })
-                .finally(() => {
-                    this.isLoading = false;
-                });
+                .finally(() => { this.isLoading = false; });
         },
     },
 };

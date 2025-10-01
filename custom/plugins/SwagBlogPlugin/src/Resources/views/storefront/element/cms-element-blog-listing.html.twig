@@ -1,0 +1,20 @@
+{% block element_blog_listing %}
+    <div class="cms-element-blog-listing">
+        {% if element.data %}
+        <h2>Blog Listings {{ dump(element.data) }}
+</h2>
+            <ul>
+                {% for blog in element.data %}
+                    <li>
+                        {# <a href="{{ path('frontend.blog.detail', { blogId: blog.id }) }}">
+                           
+                        </a> #}
+                         {{ blog.title }}
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>No blogs found.</p>
+        {% endif %}
+    </div>
+{% endblock %}

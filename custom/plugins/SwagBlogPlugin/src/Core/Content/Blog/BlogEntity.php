@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace SwagBlogPlugin\Core\Content\Blog;
 
@@ -17,6 +19,7 @@ class BlogEntity extends Entity
     protected ?BlogCategoryEntity $category = null; // Association
     protected ?string $mainImageId = null;
     protected ?\DateTimeInterface $publishedAt = null;
+    protected ?\Shopware\Core\Content\Media\MediaEntity $mainImage = null;
 
     public function getTitle(): string
     {
@@ -77,7 +80,15 @@ class BlogEntity extends Entity
     {
         $this->mainImageId = $mainImageId;
     }
+    public function getMainImage(): ?\Shopware\Core\Content\Media\MediaEntity
+    {
+        return $this->mainImage;
+    }
 
+    public function setMainImage(?\Shopware\Core\Content\Media\MediaEntity $mainImage): void
+    {
+        $this->mainImage = $mainImage;
+    }
     public function getPublishedAt(): ?\DateTimeInterface
     {
         return $this->publishedAt;

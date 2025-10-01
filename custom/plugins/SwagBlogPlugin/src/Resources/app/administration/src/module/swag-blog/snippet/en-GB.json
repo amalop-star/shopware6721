@@ -36,7 +36,8 @@
             "messageSaveError": "Error saving blog.",
             "titleNew": "New blog",
             "buttonSave": "Save",
-            "buttonCancel": "Cancel"
+            "buttonCancel": "Cancel",
+            "labelLogo": "Blog image"
         }
     }
 }

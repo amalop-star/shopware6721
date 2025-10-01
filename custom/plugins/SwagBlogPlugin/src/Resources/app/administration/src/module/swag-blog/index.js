@@ -3,10 +3,11 @@ const { Module } = Shopware;
 Shopware.Component.register('swag-blog-list', () => import('./page/swag-blog-list'));
 Shopware.Component.register('swag-blog-detail', () => import('./page/swag-blog-detail'));
 Shopware.Component.extend('swag-blog-create', 'swag-blog-detail', () => import('./page/swag-blog-create'));
-Shopware.Component.register('swag-blog-media-form', () => import('./component/swag-blog-media-form'));
+// Shopware.Component.register('swag-blog-media-form', () => import('./component/swag-blog-media-form'));
+Shopware.Component.register('sw-media-upload-v2', () => import('./component/swag-media-upload-v2'));
 
 Module.register('swag-blog', {
-    type: 'plugin',   
+    type: 'plugin',
     name: 'swag-blog',
     title: 'swag-blog.general.mainMenuItemGeneral',
     description: 'swag-blog.general.descriptionTextModule',
@@ -44,7 +45,7 @@ Module.register('swag-blog', {
         color: '#FFD700',
         path: 'swag.blog.index',
         icon: 'regular-newspaper',
-        parent: 'sw-marketing',   
+        parent: 'sw-content',
         position: 100,
     }],
 });

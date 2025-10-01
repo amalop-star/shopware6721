@@ -12,7 +12,12 @@ use Shopware\Core\Content\Media\MediaEntity;
 class BlogMediaEntity extends Entity
 {
     use EntityIdTrait;
-
+    /**
+     * @var int
+     *
+     * @deprecated 
+     */
+    protected $position;
     /**
      * @var string|null
      */
@@ -103,5 +108,14 @@ class BlogMediaEntity extends Entity
     public function setMedia(?MediaEntity $media): void
     {
         $this->media = $media;
+    }
+    public function getPosition(): int
+    {
+        return $this->position;
+    }
+
+    public function setPosition(int $position): void
+    {
+        $this->position = $position;
     }
 }

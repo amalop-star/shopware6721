@@ -1,0 +1,9 @@
+{% block block_text_image %}
+ {% set element = block.slots.getSlot('content') %}
+    <div class="row cms-block-custom">
+        <div class="col-12">
+             {% sw_include "@Storefront/storefront/element/cms-element-" ~ element.type ~ ".html.twig" ignore missing  %}
+        </div>
+       
+    </div>
+{% endblock %}
