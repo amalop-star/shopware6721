@@ -1,0 +1,31 @@
+
+
+<a
+	href="{{ path('frontend.blog.detail', { blogId: blog.id }) }}" class="blog-card block rounded-lg shadow hover:shadow-lg transition bg-white" style="text-decoration:none;color:inherit;">
+	{# Main Image or default placeholder #}
+	{% if blog.mainImage %}
+		<img src="{{ blog.mainImage.url }}" alt="{{ blog.title }}" class="object-cover rounded-md mb-2" style="width:300px;">
+	{% else %}
+		<div class="rounded-md mb-2" style="height:200px;background-color:lightgray;font-size:20px;display:flex;align-items:center;justify-content:center;">
+			No Image
+		</div>
+	{% endif %}
+
+	{# Blog Title #}
+	<h3 class="text-base font-semibold mb-1 truncate">
+		{{ blog.title }}
+	</h3>
+
+	{# Author #}
+	{% if blog.author %}
+		<p class="text-xs text-gray-500 truncate">By
+			{{ blog.author }}</p>
+	{% endif %}
+
+	{# Optional Published Date #}
+	{% if blog.publishedAt %}
+		<p class="text-xs text-gray-400 mt-1">
+			{{ blog.publishedAt|date('M d, Y') }}
+		</p>
+	{% endif %}
+</a>

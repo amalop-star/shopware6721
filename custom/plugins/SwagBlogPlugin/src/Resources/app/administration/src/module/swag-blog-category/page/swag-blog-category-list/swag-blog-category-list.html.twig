@@ -31,10 +31,6 @@
     {% block swag_blog_category_list_actions %}
     <template #smart-bar-actions>
         <sw-button
-            v-tooltip.bottom="{
-                message: $tc('sw-privileges.tooltip.warning'),
-                showOnDisabledElements: true
-            }"
             class="swag-blog-category-list__button-create"
             :router-link="{ name: 'sw.settings.blog.category.create' }"
             variant="primary"

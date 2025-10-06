@@ -41,9 +41,14 @@ export default {
             showMediaModal: false,
         };
     },
+
     computed: {
         identifier() {
             return this.blog ? this.blog.title : '';
+        },
+
+        isCreateMode() {
+            return !this.blogId && !this.blog?.id;
         },
 
         blogRepository() {
@@ -54,25 +59,15 @@ export default {
             return this.repositoryFactory.create('swag_blog_category');
         },
 
-        mediaRepository() {
-            return this.repositoryFactory.create('media');
-        },
-
         categoryOptions() {
             return this.categories.map(cat => ({ value: cat.id, label: cat.name }));
         },
 
         mediaUploadTag() {
-            return `sw-blog-detail--${this.blog.id ?? 'new'}`;
+            return `sw-blog-detail--${this.blog?.id ?? 'new'}`;
         },
 
-        ...mapPropertyErrors('blog', ['title', 'categoryId']),
-    },
-
-    watch: {
-        blogId() {
-            this.createdComponent();
-        },
+        ...mapPropertyErrors('blog', ['title', 'categoryId', 'author']),
     },
 
     created() {
@@ -80,9 +75,9 @@ export default {
     },
 
     methods: {
-        createdComponent() {
-            this.loadEntity();
-            this.loadCategories();
+        async createdComponent() {
+            await this.loadCategories();
+            await this.loadEntity();
         },
 
         async loadCategories() {
@@ -92,24 +87,32 @@ export default {
         },
 
         async loadEntity() {
-            if (!this.$route.params.id) return;
-
             this.isLoading = true;
-            try {
-                const blog = await this.blogRepository.get(this.$route.params.id, Context.api, criteria);
 
-                if (blog) {
-                    this.blog = {
-                        ...blog,
-                        errors: {}, // ensure errors exists
-                    };
+            try {
+                const criteria = new Criteria();
+                criteria.addAssociation('mainImage');
+
+                const entity = await this.blogRepository.get(this.blogId || this.$route.params.id, Context.api, criteria);
+                if (entity) {
+                    entity.errors = entity.errors || {};
+
+                    if (entity.publishedAt && !(entity.publishedAt instanceof Date)) {
+                        entity.publishedAt = new Date(entity.publishedAt);
+                    } else if (!entity.publishedAt) {
+                        entity.publishedAt = null;
+                    }
+
+                    this.blog = entity;
                 }
+
             } catch (error) {
                 this.createNotificationError({ message: 'Failed to load blog data.' });
             } finally {
                 this.isLoading = false;
             }
         },
+
         openMediaModal() {
             this.showMediaModal = true;
         },
@@ -126,6 +129,7 @@ export default {
             this.blog.mainImage = media;
             this.showMediaModal = false;
         },
+
         onUploadMedia({ targetId, media }) {
             this.blog.mainImageId = targetId;
             if (media) {
@@ -133,36 +137,61 @@ export default {
             }
         },
 
+        onDropMedia(dragData) {
+            this.onUploadMedia({ targetId: dragData.id, media: dragData });
+        },
+
         onUnlinkLogo() {
             this.blog.mainImageId = null;
             this.blog.mainImage = null;
         },
 
+        validateBlog() {
+            this.blog.errors = {};
+            let isValid = true;
 
-        onDropMedia(dragData) {
-            this.onUploadMedia({ targetId: dragData.id, media: dragData });
-        },
-
-
-        onSave() {
             if (!this.blog.title || this.blog.title.trim() === '') {
                 this.blog.errors.title = 'Title must not be empty';
                 this.createNotificationError({ message: 'Please fill the Title field.' });
-                return;
+                isValid = false;
             }
+
+            if (!this.blog.author || this.blog.author.trim() === '') {
+                this.blog.errors.author = 'Author must not be empty';
+                this.createNotificationError({ message: 'Please fill the Author field.' });
+                isValid = false;
+            }
+
+            if (!this.blog.categoryId) {
+                this.blog.errors.categoryId = 'Category must be selected';
+                this.createNotificationError({ message: 'Please select a Category.' });
+                isValid = false;
+            }
+
+            return isValid;
+        },
+
+        async onSave() {
+            if (!this.validateBlog()) return;
 
             this.isLoading = true;
 
-            this.blogRepository.save(this.blog, Context.api)
-                .then(() => {
-                    this.isLoading = false;
-                    this.isSaveSuccessful = true;
+            try {
+                await this.blogRepository.save(this.blog, Context.api);
+                this.isSaveSuccessful = true;
+
+                if (this.isCreateMode) {
+                    this.createNotificationSuccess({ message: 'Blog created successfully.' });
+                    this.$router.push({ name: 'swag.blog.detail', params: { id: this.blog.id } });
+                } else {
                     this.createNotificationSuccess({ message: 'Blog updated successfully.' });
-                })
-                .catch(() => {
-                    this.createNotificationError({ message: 'Failed to save blog.' });
-                })
-                .finally(() => { this.isLoading = false; });
+                }
+            } catch (error) {
+                console.error('Blog save failed:', error);
+                this.createNotificationError({ message: 'Failed to save blog.' });
+            } finally {
+                this.isLoading = false;
+            }
         },
 
         onCancel() {
