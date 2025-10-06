@@ -1,20 +1,14 @@
 {% block sw_cms_element_blog_listing_config %}
 	<div class="sw-cms-el-config-blog-listing">
-		<sw-entity-single-select 
-			v-model:value="element.config.category.value" 
-			entity="swag_blog_category" 
-			label="Select Blog Category" 
-			required 
-			:label-property="'name'" 
-			@update:value="onCategoryChange"
-		/>
-		
-		<sw-number-field 
-			v-model:value="element.config.limit.value" 
-			label="Number of blogs" 
-			numberType="int" 
-			:min="1" 
-			@update:value="onLimitChange"
-		/>
+		<sw-single-select v-model:value="element.config.category.value" :options="categoryOptions" label="Select Blog Category" :label-property="'label'" value-property="value" @update:value="onCategoryChange">
+			<template #selection-label-property="{ item }">
+				{{ item.label }}
+			</template>
+			<template #result-label-property="{ item }">
+				{{ item.label }}
+			</template>
+		</sw-single-select>
+
+		<sw-number-field v-model:value="element.config.limit.value" label="Number of blogs" numbertype="int" :min="1" @update:value="onLimitChange"/>
 	</div>
 {% endblock %}

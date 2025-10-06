@@ -1,20 +1,21 @@
-{% block element_blog_listing %}
-    <div class="cms-element-blog-listing">
-        {% if element.data %}
-        <h2>Blog Listings {{ dump(element.data) }}
-</h2>
-            <ul>
-                {% for blog in element.data %}
-                    <li>
-                        {# <a href="{{ path('frontend.blog.detail', { blogId: blog.id }) }}">
-                           
-                        </a> #}
-                         {{ blog.title }}
-                    </li>
-                {% endfor %}
-            </ul>
-        {% else %}
-            <p>No blogs found.</p>
+{% block sw_cms_el_blog_listing %}
+<div class="cms-element-blog-listing">
+    {% set data = element.data %}
+
+    {% if data.blogs|length %}
+        {% if data.categoryName %}
+            <h2 class="text-2xl font-bold mb-4">{{ data.categoryName }}</h2>
         {% endif %}
-    </div>
+
+        <div class="row">
+            {% for blog in data.blogs %}
+                <div class="col-12 col-md-6 col-lg-4 mb-4">
+                    {% include '@SwagBlogPlugin/storefront/component/blog-card.html.twig' with { blog: blog } %}
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p>No blogs found.</p>
+    {% endif %}
+</div>
 {% endblock %}

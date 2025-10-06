@@ -1,21 +1,17 @@
 import template from './sw-cms-el-blog-listing-config.html.twig';
 
-
-const { Mixin } = Shopware;
-
 Shopware.Component.register('sw-cms-el-config-blog-listing', {
     template,
 
     inject: ['repositoryFactory'],
 
     mixins: [
-        Mixin.getByName('cms-element')
+        'cms-element'
     ],
 
     data() {
         return {
-            category: null,
-            isLoading: false
+            categories: []
         };
     },
 
@@ -24,35 +20,22 @@ Shopware.Component.register('sw-cms-el-config-blog-listing', {
             return this.repositoryFactory.create('swag_blog_category');
         },
 
-        selectedCategoryId() {
-            return this.element?.config?.category?.value || null;
-        },
-
-        postLimit() {
-            return this.element?.config?.limit?.value || 6;
-        },
-
-        categoryName() {
-            if (this.isLoading) {
-                return 'Loading...';
-            }
-            if (this.selectedCategoryId && !this.category) {
-                return 'Loading category...';
-            }
-            return this.category?.name || 'No category selected';
-        }
-    },
-
-    watch: {
-        selectedCategoryId: {
-            handler(newValue, oldValue) {
-                // Only load if value actually changed and component is ready
-                if (newValue && newValue !== oldValue) {
-                    this.loadCategory(newValue);
-                } else if (!newValue) {
-                    this.category = null;
+        categoryOptions() {
+            const options = [
+                {
+                    value: null,
+                    label: 'All Categories'
                 }
-            }
+            ];
+
+            this.categories.forEach(category => {
+                options.push({
+                    value: category.id,
+                    label: category.name
+                });
+            });
+
+            return options;
         }
     },
 
@@ -63,26 +46,27 @@ Shopware.Component.register('sw-cms-el-config-blog-listing', {
     methods: {
         createdComponent() {
             this.initElementConfig('blog-listing');
-            
-            // Load category after config is initialized
-            if (this.selectedCategoryId) {
-                this.loadCategory(this.selectedCategoryId);
-            }
+            this.loadCategories();
         },
 
-        loadCategory(categoryId) {
-            this.isLoading = true;
+        loadCategories() {
             const criteria = new Shopware.Data.Criteria();
-            
-            this.categoryRepository.get(categoryId, Shopware.Context.api, criteria)
-                .then((category) => {
-                    this.category = category;
-                    this.isLoading = false;
-                })
-                .catch(() => {
-                    this.category = null;
-                    this.isLoading = false;
+            criteria.addSorting(Shopware.Data.Criteria.sort('name', 'ASC'));
+
+            this.categoryRepository.search(criteria, Shopware.Context.api)
+                .then((result) => {
+                    this.categories = result;
                 });
+        },
+
+        onCategoryChange(value) {
+            this.element.config.category.value = value;
+            this.$emit('element-update', this.element);
+        },
+
+        onLimitChange(value) {
+            this.element.config.limit.value = value;
+            this.$emit('element-update', this.element);
         }
     }
 });

@@ -1,9 +1,12 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace SwagBlogPlugin\Core\Content\BlogCategory;
 
 use Shopware\Core\Framework\DataAbstractionLayer\Entity;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityIdTrait;
+use Shopware\Core\Framework\DataAbstractionLayer\EntityCollection;
 
 class BlogCategoryEntity extends Entity
 {
@@ -34,7 +37,15 @@ class BlogCategoryEntity extends Entity
     {
         $this->description = $description;
     }
+    public function getBlogs(): ?EntityCollection
+    {
+        return $this->blogs;
+    }
 
+    public function setBlogs(EntityCollection $blogs): void
+    {
+        $this->blogs = $blogs;
+    }
     public function isActive(): bool
     {
         return $this->active;

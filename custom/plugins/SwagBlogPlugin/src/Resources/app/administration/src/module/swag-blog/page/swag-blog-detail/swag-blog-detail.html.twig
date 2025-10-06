@@ -25,23 +25,40 @@
 				<sw-text-field v-model:value="blog.author" label="Author" :error="blog.errors?.author" required/>
 
 				<sw-single-select v-model:value="blog.categoryId" label="Category" :error="blog.errors?.categoryId" :options="categoryOptions" display-field="label" value-property="value" placeholder="Select a category"/>
-				<sw-datepicker v-model:value="blog.publishedAt" :label="$tc('swag-blog.detail.labelPublishedAt')" size="medium" required :date-type="isDateTime" :error="blog.errors?.publishedAt"/>
+				<sw-datepicker
+				v-model:value="blog.publishedAt" :label="$tc('swag-blog.detail.labelPublishedAt')" size="medium" required :date-type="isDateTime" :error="blog.errors?.publishedAt"/>
 
 
 				{# {% block sw_blog_detail_logo_upload %}
-						<sw-upload-listener :upload-tag="mediaUploadTag" auto-upload @media-upload-finish="setMediaItem"/>
-						<sw-media-upload-v2 :default-folder="blogRepository.entityName" :source="blog.mainImageId" :allow-multi-select="false" variant="regular" :upload-tag="mediaUploadTag" :label="$tc('sw-blog.detail.labelLogo')" @sw-media-upload-v2-media-upload-success="setMediaItem" @media-drop="onDropMedia" @media-upload-sidebar-open="openMediaSidebar" @media-upload-remove-image="onUnlinkLogo"/>
+																																						<sw-upload-listener :upload-tag="mediaUploadTag" auto-upload @media-upload-finish="setMediaItem"/>
+																																						<sw-media-upload-v2 :default-folder="blogRepository.entityName" :source="blog.mainImageId" :allow-multi-select="false" variant="regular" :upload-tag="mediaUploadTag" :label="$tc('sw-blog.detail.labelLogo')" @sw-media-upload-v2-media-upload-success="setMediaItem" @media-drop="onDropMedia" @media-upload-sidebar-open="openMediaSidebar" @media-upload-remove-image="onUnlinkLogo"/>
+																																
+																																					{% endblock %} #}
 
+				{# {% block sw_blog_detail_logo_upload %}
+						<sw-upload-listener :upload-tag="mediaUploadTag" auto-upload @media-upload-finish="setMediaItem"/>
+						<sw-media-upload-v2 class="sw-blog-detail__logo-upload" :source="blog.mainImageId" :allow-multi-select="false" variant="regular" :upload-tag="mediaUploadTag" :label="$tc('sw-blog.detail.labelLogo')" :default-folder="blogRepository.entityName" @sw-media-upload-v2-media-upload-success="setMediaItem" @media-drop="onDropMedia" @media-upload-remove-image="onUnlinkLogo" @media-upload-sidebar-open="openMediaSidebar"/>
+						<sw-media-sidebar ref="mediaSidebarItem" :upload-tag="mediaUploadTag" @media-selection-change="setMediaItem"></sw-media-sidebar>
 					{% endblock %} #}
 
 					{% block sw_blog_detail_logo_upload %}
-						<sw-upload-listener :upload-tag="mediaUploadTag" auto-upload @media-upload-finish="setMediaItem"/>
-						<sw-media-upload-v2 class="sw-blog-detail__logo-upload" :source="blog.mainImageId" :allow-multi-select="false" variant="regular" :upload-tag="mediaUploadTag" :label="$tc('sw-blog.detail.labelLogo')" :default-folder="blogRepository.entityName" @sw-media-upload-v2-media-upload-success="setMediaItem" @media-drop="onDropMedia" @media-upload-remove-image="onUnlinkLogo" @media-upload-sidebar-open="openMediaSidebar"/>
+
+						<sw-upload-listener :upload-tag="mediaUploadTag" auto-upload @media-upload-finish="onUploadMedia"/>
+
+						<sw-media-upload-v2 :source="blog.mainImage" :allow-multi-select="false" :upload-tag="mediaUploadTag" :default-folder="blogRepository.entityName" @sw-media-upload-v2-media-upload-success="onUploadMedia" @media-drop="onUploadMedia" @media-upload-sidebar-open="openMediaModal" @media-upload-remove-image="onUnlinkLogo"/>
+
+						<sw-media-modal-v2 v-if="showMediaModal" :allow-multi-select="false" :entity-context="mediaUploadTag" @media-modal-selection-change="onSelectMedia" @media-upload-finish="onUploadMedia" @modal-close="closeMediaModal"/>
+						<sw-media-preview v-if="blog.mainImage" :media="blog.mainImage" :show-toolbar="true">
+							<template #toolbar>
+								<sw-button variant="danger" @click="onUnlinkLogo">Remove</sw-button>
+							</template>
+						</sw-media-preview>
 					{% endblock %}
+
 
 				</sw-card>
 
-				
+
 			</sw-card-view>
 
 

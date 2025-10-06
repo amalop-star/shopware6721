@@ -11,22 +11,6 @@ export default {
         Mixin.getByName('notification'),
     ],
 
-    data() {
-        return {
-            blog: {
-                title: '',
-                description: '',
-                categoryId: null,
-                mainImageId: null,
-                mainImage: null,
-                errors: {},
-                publishedAt: null,
-            },
-            categories: [],
-            isLoading: false,
-        };
-    },
-
     computed: {
         blogRepository() {
             return this.repositoryFactory.create('swag_blog');
@@ -47,20 +31,17 @@ export default {
     },
 
     methods: {
-        loadCategories() {
-            const criteria = new Criteria(1, 100);
-            criteria.addSorting(Criteria.sort('name', 'ASC'));
-
-            this.categoryRepository.search(criteria, Context.api).then(result => {
-                this.categories = result;
-            });
-        },
-
         loadEntity() {
-            this.blog = this.blogRepository.create(Context.api);
+            const entity = this.blogRepository.create(Context.api);
+            this.blog = {
+                ...this.blog,
+                ...entity,
+                errors: { ...this.blog.errors }
+            };
         },
 
-      
+
+
 
         onSave() {
             if (!this.blog.title || this.blog.title.trim() === '') {

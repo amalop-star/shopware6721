@@ -12,7 +12,7 @@ Shopware.Service('cmsService').registerCmsElement({
         category: {
             source: 'static',
             value: null,
-            required: true,
+            required: false,
             entity: {
                 name: 'swag_blog_category'
             }

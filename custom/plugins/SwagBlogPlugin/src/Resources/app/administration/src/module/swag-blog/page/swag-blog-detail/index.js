@@ -38,6 +38,7 @@ export default {
             categories: [],
             isLoading: false,
             isSaveSuccessful: false,
+            showMediaModal: false,
         };
     },
     computed: {
@@ -81,7 +82,6 @@ export default {
     methods: {
         createdComponent() {
             this.loadEntity();
-
             this.loadCategories();
         },
 
@@ -92,28 +92,41 @@ export default {
         },
 
         async loadEntity() {
-            this.isLoading = true;
+            if (!this.$route.params.id) return;
 
+            this.isLoading = true;
             try {
-                this.blog = await this.blogRepository.get(this.$route.params.id, Context.api, new Criteria());
+                const blog = await this.blogRepository.get(this.$route.params.id, Context.api, criteria);
+
+                if (blog) {
+                    this.blog = {
+                        ...blog,
+                        errors: {}, // ensure errors exists
+                    };
+                }
             } catch (error) {
-                this.createNotificationError({
-                    message: 'Failed to load blog data.',
-                });
+                this.createNotificationError({ message: 'Failed to load blog data.' });
             } finally {
                 this.isLoading = false;
             }
         },
-
-        openMediaSidebar() {
-            if (!this.$refs.mediaSidebarItem) {
-                console.warn('Media sidebar ref not found!');
-                return;
-            }
-            this.$refs.mediaSidebarItem.openContent();
+        openMediaModal() {
+            this.showMediaModal = true;
         },
 
-        setMediaItem({ targetId, media }) {
+        closeMediaModal() {
+            this.showMediaModal = false;
+        },
+
+        onSelectMedia(selection) {
+            if (!selection || selection.length === 0) return;
+
+            const media = selection[0];
+            this.blog.mainImageId = media.id;
+            this.blog.mainImage = media;
+            this.showMediaModal = false;
+        },
+        onUploadMedia({ targetId, media }) {
             this.blog.mainImageId = targetId;
             if (media) {
                 this.blog.mainImage = media;
@@ -125,14 +138,11 @@ export default {
             this.blog.mainImage = null;
         },
 
+
         onDropMedia(dragData) {
-            this.setMediaItem({ targetId: dragData.id, media: dragData });
+            this.onUploadMedia({ targetId: dragData.id, media: dragData });
         },
 
-
-        setMediaFromSidebar(media) {
-            this.blog.mainImageId = media.id;
-        },
 
         onSave() {
             if (!this.blog.title || this.blog.title.trim() === '') {

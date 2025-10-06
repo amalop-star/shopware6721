@@ -15,7 +15,8 @@ Shopware.Component.register('sw-cms-el-blog-listing', {
 
     data() {
         return {
-            category: null
+            category: null,
+            isLoading: false
         };
     },
 
@@ -36,20 +37,21 @@ Shopware.Component.register('sw-cms-el-blog-listing', {
             if (this.isLoading) {
                 return 'Loading...';
             }
-            if (this.selectedCategoryId && !this.category) {
-                return 'Loading category...';
+            if (!this.selectedCategoryId ) {
+                return 'All Blogs';
             }
-            return this.category?.name || 'No category selected';
+            // If no category selected, show "All Blogs"
+            return this.category?.name || 'All Blogs';
         }
     },
 
     watch: {
         selectedCategoryId: {
             handler(newValue) {
-                if (newValue) {
-                    this.loadCategory(newValue);
-                } else {
+                if (!newValue ) {
                     this.category = null;
+                    this.isLoading = false;
+                    return;
                 }
             },
             immediate: true
@@ -63,10 +65,12 @@ Shopware.Component.register('sw-cms-el-blog-listing', {
     methods: {
         createdComponent() {
             this.initElementConfig('blog-listing');
+
         },
 
         loadCategory(categoryId) {
             this.isLoading = true;
+
             const criteria = new Shopware.Data.Criteria();
 
             this.categoryRepository.get(categoryId, Shopware.Context.api, criteria)
@@ -81,3 +85,4 @@ Shopware.Component.register('sw-cms-el-blog-listing', {
         }
     }
 });
+

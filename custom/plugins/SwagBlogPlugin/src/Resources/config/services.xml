@@ -17,8 +17,14 @@
             <tag name="shopware.entity.definition" entity="swag_blog_media" />
         </service>
         <service id="SwagBlogPlugin\Core\Content\Cms\DataResolver\BlogListingCmsElementResolver">
-            <argument type="service" id="swag_blog.repository"/>
-            <tag name="shopware.cms.data_resolver"/>
+            <argument type="service" id="swag_blog_category.repository" />
+            <tag name="shopware.cms.data_resolver" />
+        </service>
+        <service id="SwagBlogPlugin\Storefront\Controller\BlogController" public="true">
+            <argument type="service" id="swag_blog.repository" />
+            <call method="setContainer">
+                <argument type="service" id="service_container" />
+            </call>
         </service>
     </services>
 </container>
